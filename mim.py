@@ -112,7 +112,7 @@ Database
 list db - print a list of configured databases
 add db <db name> <db path> - Add a database
 del db <#> - Remove a database
-
+scan db <db path> - Scan path for databases
 
 Servers
 =======
@@ -181,6 +181,24 @@ def menu_del_db(args):
   c.execute( 'DELETE FROM databases WHERE id = ?', args[0])
   dbconn.commit()
   print "\nDeleted."
+
+def menu_scan_db(args):
+  global dbconn
+  counter = 0
+  for dbdir in os.listdir(args[0]):
+    dbname = dbdir
+    dblocation = args[0]+"/"+dbdir;
+    c = dbconn.cursor()
+    c.execute( 'SELECT id FROM databases WHERE name = ? AND path = ?', [dbname, dblocation] )
+    if c.fetchone():
+      print "Database Exists: ( " + dbname + " )"
+    else:
+      print "Adding Database: ( " + dbname + " @ " + dblocation + ")"
+      c.execute( 'INSERT INTO databases ( name, path ) VALUES ( ?, ? )', [dbname, dblocation])
+      dbconn.commit()
+      counter = counter + 1
+
+  print "Found and added " + str(counter) + " databases."
 
 def menu_list_server():
   global dbconn
@@ -364,6 +382,10 @@ while action != 'quit':
   cmd = re.findall( '^del db (\d+)$', action)
   if cmd:
     menu_del_db(cmd)
+
+  cmd = re.findall( '^scan db (\S+)$', action)
+  if cmd:
+    menu_scan_db(cmd)
 
   if action == 'list servers':
     menu_list_server()
