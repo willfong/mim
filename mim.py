@@ -80,6 +80,8 @@ log-bin=mysql-bin
 tmpdir=MIM_DATADIR
 log_error=mysql.err
 
+performance_schema=off
+
 innodb_buffer_pool_size=64MB
 innodb_log_file_size=64MB
 sync_binlog=0
