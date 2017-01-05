@@ -359,13 +359,13 @@ print "Datadir: %s" % (datadir)
 
 # Infinite Loop
 
-while action != 'quit':
+while action != 'quit' and action != '\q':
 
   if action == '':
     # Make a default if someone hits enter
     action = 'list servers'
 
-  if action == 'help':
+  if action == 'help' or action == '?':
     menu_help()
 
   if action == 'mem':
@@ -440,7 +440,7 @@ while action != 'quit':
 
 
   print "Type 'help' for help."
-  action = raw_input( "Yes, me lord? ")
+  action = raw_input( "mim> ")
 
 
-print "Bye!"
+print "Exit"
